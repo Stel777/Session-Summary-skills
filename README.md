@@ -22,6 +22,7 @@ macOS / Linux:
 
 ```bash
 git clone https://github.com/Stel777/Session-Summary-skills.git
+mkdir -p ~/.claude/skills
 cp -r Session-Summary-skills/start-session Session-Summary-skills/end-session ~/.claude/skills/
 ```
 
@@ -29,11 +30,17 @@ Windows (PowerShell):
 
 ```powershell
 git clone https://github.com/Stel777/Session-Summary-skills.git
+New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
 Copy-Item -Recurse Session-Summary-skills\start-session, Session-Summary-skills\end-session "$HOME\.claude\skills\"
 ```
 
-To use them in one project only, copy them into `<project>/.claude/skills/`
-instead. Then start a new Claude Code session so the skills are loaded.
+The first line after the clone creates the skills folder if you have never
+installed a skill. Without it, the copy fails on macOS / Linux, and on Windows
+it puts the files in the wrong place without an error.
+
+To use them in one project only, use `<project>/.claude/skills/` in place of
+the home folder in the same commands. Then start a new Claude Code session so
+the skills are loaded.
 
 ## Use
 
