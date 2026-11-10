@@ -56,6 +56,17 @@ When you are done:
 /end-session
 ```
 
+It asks whether you want anything noted for next time. Pick "Nothing to note",
+pick one of its suggestions, or type your own. You can also give the note
+straight away and skip the question:
+
+```
+/end-session add the chocolate cake recipe next time
+```
+
+Either way, it saves and commits the summary without asking you to approve
+anything.
+
 That is the whole workflow. The first time you run `/end-session` in a
 project, it creates `Session-Summary/`. From then on, every `/start-session`
 reads the last three summaries.

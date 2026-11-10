@@ -2,7 +2,7 @@
 name: end-session
 description: Close a work session properly. Gathers the facts from git, asks you for notes for next time, writes a standalone session summary into the project's Session-Summary/ folder, commits that one file (and nothing else), and tells you when everything is saved and safe to close, so /start-session can pick it up next time. Use when the user runs /end-session, says "end the session", "wrap up", or is finishing work on a project and wants a record kept.
 user-invocable: true
-allowed-tools: "Read Glob Grep Bash Write"
+allowed-tools: "Read Glob Grep Bash Write AskUserQuestion"
 ---
 
 # End Session
@@ -41,17 +41,34 @@ this session.
 Also read the newest file in `Session-Summary/`, if there is one. Step 3 needs
 it.
 
-## Step 2. Ask for closing notes
+## Step 2. Get closing notes without ending your turn
 
-Ask directly: **"Anything you want noted for next session? Something to pick
-up, an idea, a loose thought?"**
+Steps 2 to 6 all happen in the same turn as the `/end-session` command. This
+skill's tool permissions last only for that turn. If you end your turn to wait
+for an answer, saving the file and committing it will each stop and ask the
+user to approve.
 
-Wait for the answer. It goes into the summary close to verbatim, in its own
-section, because it is the user's direction for next time, not a fact about
-this session. Paraphrasing it risks losing the part that mattered to them.
-"Nothing" is a normal answer: write "None" and do not invent a note. Skip the
-question only if the user already answered it earlier in this closing
-exchange.
+Get the notes the first way that applies:
+
+1. **The user typed notes after the command** (for example `/end-session add
+   the cake recipe next time`): those are the notes. Do not ask again.
+2. **The user already answered earlier in this closing exchange:** use that
+   answer.
+3. **Otherwise, call the AskUserQuestion tool.** It waits for the answer
+   inside this turn.
+   - question: "Anything you want noted for next session? Something to pick
+     up, an idea, a loose thought?"
+   - header: "Notes"
+   - options: "Nothing to note" first, then up to two short suggestions taken
+     from what is still open. The user can also type their own answer.
+4. **AskUserQuestion is not available:** ask the same question in plain text
+   and wait. Saving may then ask the user for permission, which is expected.
+
+The notes go into the summary close to verbatim, in their own section, because
+they are the user's direction for next time, not a fact about this session.
+Paraphrasing them risks losing the part that mattered. If the user picked a
+suggestion, that suggestion is their note. "Nothing to note" means write
+"None", never an invented note.
 
 ## Step 3. Write the summary
 
